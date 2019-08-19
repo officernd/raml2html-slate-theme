@@ -13,11 +13,11 @@
 <div class="set-description">
   <hr/>
   {% if method.displayName %}
-  <h2 id="{{ getSafeId(resource.displayName + '-' + method.displayName) }}">{{ method.displayName }}</h2>
+  <h3 id="{{ getSafeId(resource.displayName + '-' + method.displayName) }}">{{ method.displayName }}</h3>
   {% elif resource.displayName %}
-  <h2 id="{{ getSafeId(resource.displayName + '-' + method.method) }}">{{ resource.displayName + " " + method.method }}</h2>
+  <h3 id="{{ getSafeId(resource.displayName + '-' + method.method) }}">{{ resource.displayName + " " + method.method }}</h3>
   {% else %}
-  <h2 id="{{ getSafeId(resource.parentUrl + resource.relativeUri + method.method) }}">{{ resource.parentUrl }}{{ resource.relativeUri}} {{ method.method }}</h2>
+  <h3 id="{{ getSafeId(resource.parentUrl + resource.relativeUri + method.method) }}">{{ resource.parentUrl }}{{ resource.relativeUri}} {{ method.method }}</h3>
   {% endif %}
 
   <p>
@@ -77,11 +77,11 @@
 <div class="set-examples">
   <hr/>
   {% if method.displayName %}
-  <h2 class="toc-ignore" id="{{ getSafeId(resource.displayName + '-' + method.displayName) }}">{{ method.displayName }}</h2>
+  <h3 class="toc-ignore" id="{{ getSafeId(resource.displayName + '-' + method.displayName) }}">{{ method.displayName }}</h3>
   {% elif resource.displayName %}
-  <h2 class="toc-ignore" id="{{ getSafeId(resource.displayName + '-' + method.method) }}">{{ resource.displayName + " " + method.method }}</h2>
+  <h3 class="toc-ignore" id="{{ getSafeId(resource.displayName + '-' + method.method) }}">{{ resource.displayName + " " + method.method }}</h3>
   {% else %}
-  <h2 class="toc-ignore" id="{{ getSafeId(resource.parentUrl + resource.relativeUri + method.method) }}">{{ resource.parentUrl }}{{ resource.relativeUri}} {{ method.method }}</h2>
+  <h3 class="toc-ignore" id="{{ getSafeId(resource.parentUrl + resource.relativeUri + method.method) }}">{{ resource.parentUrl }}{{ resource.relativeUri}} {{ method.method }}</h3>
   {% endif %}
 
 <blockquote><h3 class="toc-ignore">CURL EXAMPLE</h3></blockquote>

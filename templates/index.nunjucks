@@ -1,19 +1,15 @@
 {% set comma = joiner() %}
-<h1 id="{{ getSafeId(title) }}">{{ title }} Documentation</h1>
+<h1 id="{{ getSafeId(title) }}">{{ title }} API</h1>
 <p>
-{% if version %}<strong>version</strong> {{ version }}<br/>{% endif %}
-{% if baseUri %}<strong>baseUri</strong> {{ baseUri }}<br/>{% endif %}
-{% if protocols %}<strong>protocols</strong>
-  {% for protocol in protocols -%}
-    {{ comma() }} {{protocol}}
-  {%- endfor %}
-  <br/>
-{% endif -%}
-{% if mediaType %}<strong>mediaType</strong> {{ mediaType }}{% endif %}
+{% if version %}<strong>Version</strong> {{ version }}<br/>{% endif %}
+{% if baseUri %}<strong>Base URI</strong> {{ baseUri }}<br/>{% endif %}
+{% if protocols %}<strong>Supported Protocols</strong> {{ protocols | join(', ') }}<br/>{% endif -%}
+{% if mediaType %}<strong>Media Type</strong> {{ mediaType }}{% endif %}
 </p>
 
 {% for item in documentation %}
-<h1 id="{{ getSafeId(item.title) }}">{{ item.title }}</h1>
+{% if item.title[0] === '^' %}
+<h1 id="{{ getSafeId(item.title) | replace('^', '') }}">{{ item.title | replace('^', '') }}</h1>
 <div class="set">
   <div class="set-description">
 {% markdown %}
@@ -21,15 +17,16 @@
 {% endmarkdown %}
   </div>
 </div>
+{% endif %}
 {% endfor %}
 
-{% include "./types.nunjucks" %}
-
+{# {% include "./types.nunjucks" %} #}
+<h1 id="getSafeId('resources')">Resources</h1>
 {% for resource in resources %}
 {% if resource.displayName %}
-  <h1 id="{{ getSafeId(resource.displayName) }}">{{ resource.displayName }}</h1>
+  <h2 id="{{ getSafeId(resource.displayName) }}">{{ resource.displayName }}</h2>
 {% else %}
-  <h1 id="{{ getSafeId(resource.relativeUri) }}">{{ resource.relativeUri }}</h1>
+  <h2 id="{{ getSafeId(resource.relativeUri) }}">{{ resource.relativeUri }}</h2>
 {% endif %}
 <p>
   {% markdown -%}
@@ -39,4 +36,17 @@
 
 {% include "./resource.nunjucks" %}
 
+{% endfor %}
+
+{% for item in documentation %}
+{% if item.title[0] !== '^' %}
+<h1 id="{{ getSafeId(item.title) }}">{{ item.title }}</h1>
+<div class="set">
+  <div class="set-description">
+{% markdown %}
+{{ item.content }}
+{% endmarkdown %}
+  </div>
+</div>
+{% endif %}
 {% endfor %}
