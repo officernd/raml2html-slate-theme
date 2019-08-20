@@ -1,15 +1,8 @@
 {% set comma = joiner() %}
-<h1 id="{{ getSafeId(title) }}">{{ title }} API</h1>
-<p>
-{% if version %}<strong>Version</strong> {{ version }}<br/>{% endif %}
-{% if baseUri %}<strong>Base URI</strong> {{ baseUri }}<br/>{% endif %}
-{% if protocols %}<strong>Supported Protocols</strong> {{ protocols | join(', ') }}<br/>{% endif -%}
-{% if mediaType %}<strong>Media Type</strong> {{ mediaType }}{% endif %}
-</p>
-
+{# <h1 id="{{ getSafeId('Introduction') }}">Introduction</h1> #}
 {% for item in documentation %}
-{% if item.title[0] === '^' %}
-<h1 id="{{ getSafeId(item.title) | replace('^', '') }}">{{ item.title | replace('^', '') }}</h1>
+{% if not isLowPriorityArticle[item.title] %}
+<h1 id="{{ getSafeId(item.title) }}">{{ item.title | title }}</h1>
 <div class="set">
   <div class="set-description">
 {% markdown %}
@@ -20,11 +13,17 @@
 {% endif %}
 {% endfor %}
 
-{# {% include "./types.nunjucks" %} #}
-<h1 id="getSafeId('resources')">Resources</h1>
+{% include "./types.nunjucks" %}
+<h1 id="getSafeId('API Reference')">API Reference</h1>
+<p>
+  {% if version %}<strong>API Version</strong> {{ version }}<br/>{% endif %}
+  {% if baseUri %}<strong>Base URI</strong> {{ baseUri }}<br/>{% endif %}
+  {% if protocols %}<strong>Supported Protocols</strong> {{ protocols | join(', ') }}<br/>{% endif -%}
+  {% if mediaType %}<strong>Media Type</strong> {{ mediaType }}{% endif %}
+</p>
 {% for resource in resources %}
 {% if resource.displayName %}
-  <h2 id="{{ getSafeId(resource.displayName) }}">{{ resource.displayName }}</h2>
+  <h2 id="{{ getSafeId('resource-' + resource.displayName) }}">{{ resource.displayName | title }}</h2>
 {% else %}
   <h2 id="{{ getSafeId(resource.relativeUri) }}">{{ resource.relativeUri }}</h2>
 {% endif %}
@@ -39,8 +38,8 @@
 {% endfor %}
 
 {% for item in documentation %}
-{% if item.title[0] !== '^' %}
-<h1 id="{{ getSafeId(item.title) }}">{{ item.title }}</h1>
+{% if isLowPriorityArticle[item.title] %}
+<h1 id="{{ getSafeId(item.title) }}">{{ item.title | title }}</h1>
 <div class="set">
   <div class="set-description">
 {% markdown %}

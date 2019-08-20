@@ -13,15 +13,15 @@
 <div class="set-description">
   <hr/>
   {% if method.displayName %}
-  <h3 id="{{ getSafeId(resource.displayName + '-' + method.displayName) }}">{{ method.displayName }}</h3>
+  <h3 id="{{ getSafeId(resource.displayName + '-' + method.displayName) }}">{{ method.displayName | title }}</h3>
   {% elif resource.displayName %}
-  <h3 id="{{ getSafeId(resource.displayName + '-' + method.method) }}">{{ resource.displayName + " " + method.method }}</h3>
+  <h3 id="{{ getSafeId(resource.displayName + '-' + method.method) }}">{{ (method.method | upper) }}</h3>
   {% else %}
   <h3 id="{{ getSafeId(resource.parentUrl + resource.relativeUri + method.method) }}">{{ resource.parentUrl }}{{ resource.relativeUri}} {{ method.method }}</h3>
   {% endif %}
 
   <p>
-  <code>{{ (method.method | upper )}}: {{ resource.parentUrl }}{{ resource.relativeUri }}</code> {% if method.securedBy %} <em>(secured)</em>{% endif %}
+  <code>{{ (method.method | upper )}} {{ resource.parentUrl }}{{ resource.relativeUri }}</code> {% if method.securedBy %} <em>(secured)</em>{% endif %}
   </p>
 
   {% markdown -%}
@@ -84,8 +84,8 @@
   <h3 class="toc-ignore" id="{{ getSafeId(resource.parentUrl + resource.relativeUri + method.method) }}">{{ resource.parentUrl }}{{ resource.relativeUri}} {{ method.method }}</h3>
   {% endif %}
 
-<blockquote><h3 class="toc-ignore">CURL EXAMPLE</h3></blockquote>
-<div class="languagebox bash">
+<blockquote><h3 class="toc-ignore">EXAMPLE</h3></blockquote>
+<div class="languagebox cURL">
   <pre><code>{{ getCurlStatement(method, resource) | escape }}</code></pre>
 </div>
 

@@ -50,6 +50,7 @@ function processRamlObj (ramlObj, config) {
       ramlObj.logo = data[1]
       ramlObj.logoMime = getMimeType(config.logoPath)
       ramlObj.languageTabs = config.languageTabs.length > 1 ? config.languageTabs : undefined
+      ramlObj.isLowPriorityArticle = (config.lowPriorityArticles || []).reduce((result, article) => ({ ...result, [article]: true }), {})
       ramlObj.search = true
 
       return renderHtml(templatesPath, ramlObj)
@@ -131,14 +132,16 @@ function configureTheme (args) {
 
   const logoPath = args['logo'] || DEFAULT_LOGO
   const colorThemePath = args['color-theme'] || DEFAULT_COLOR_THEME
-  const languageTabs = validateLanguageTabs(args['language-tabs'] || DEFAULT_LANGUAGE_TABS)
+  const languageTabs = validateStringArray(args['language-tabs'] || DEFAULT_LANGUAGE_TABS)
+  const lowPriorityArticles = validateStringArray(args['low-articles'] || [])
 
   return {
     colorThemePath,
     languageTabs,
     logoPath,
     processRamlObj,
-    postProcessHtml
+    postProcessHtml,
+    lowPriorityArticles
   }
 }
 
@@ -149,13 +152,13 @@ function configureTheme (args) {
  * @return {array<string>}     An array of strings for the language tabs
  * @throws {TypeError}         Throws a TypeError if the argument does not pass input validation
  */
-function validateLanguageTabs (arg) {
-  let languageTabs
+function validateStringArray (arg) {
+  let result
 
   if (typeof arg === 'string') {
     arg = arg === '' ? '[]' : arg
     try {
-      languageTabs = JSON.parse(arg)
+      result = JSON.parse(arg)
     } catch (e) {
       if (e instanceof SyntaxError) {
         logAndExit(arg)
@@ -164,20 +167,20 @@ function validateLanguageTabs (arg) {
       }
     }
   } else {
-    languageTabs = arg
+    result = arg
   }
 
-  if (!Array.isArray(languageTabs)) {
+  if (!Array.isArray(result)) {
     logAndExit(arg)
   }
 
-  languageTabs.forEach((item) => {
+  result.forEach((item) => {
     if (typeof item !== 'string') {
       logAndExit(arg)
     }
   })
 
-  return languageTabs
+  return result
 }
 
 module.exports = configureTheme
